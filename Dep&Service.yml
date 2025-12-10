@@ -30,4 +30,4 @@ spec:
     - port: 80
       protocol: TCP
   selector:
-    run: my-app-cip
+    app: my-app-cip

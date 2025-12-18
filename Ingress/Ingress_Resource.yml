@@ -1,4 +1,3 @@
-#https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.1/deploy/static/provider/cloud/deploy.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -13,21 +12,21 @@ spec:
   - http:
       paths:
       - path: /nginx(/|$)(.*)
-        pathType: Prefix
+        pathType: ImplementationSpecific
         backend:
           service:
             name: nginx
             port:
               number: 80
       - path: /httpd(/|$)(.*)
-        pathType: Prefix
+        pathType: ImplementationSpecific
         backend:
           service:
             name: httpd
             port:
               number: 80
       - path: /(.*)
-        pathType: Prefix
+        pathType: ImplementationSpecific
         backend:
           service:
             name: nginx

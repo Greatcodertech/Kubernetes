@@ -1,0 +1,38 @@
+kubectl delete ingress --all
+kubectl delete svc --all
+kubectl delete deploy --all
+kubectl delete pod --all
+kubectl delete namespace ingress-nginx --ignore-not-found
+kubectl delete namespace metallb-system --ignore-not-found
+kubectl get all
+kubectl get ns
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/baremetal/deploy.yaml
+kubectl get pods -n ingress-nginx
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.12/config/manifests/metallb-native.yaml
+kubectl get pods -n metallb-system
+
+cat <<EOF > metallb-config.yaml
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: ec2-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 172.31.37.240-172.31.37.250
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: ec2-l2adv
+  namespace: metallb-system
+EOF
+
+kubectl apply -f metallb-config.yaml
+kubectl edit svc ingress-nginx-controller -n ingress-nginx
+kubectl get svc -n ingress-nginx
+
+CREATE APP + SERVICE + INGRESS (ALL IN ONE)
+
+http://65.2.180.119:31708/httpd
+http://65.2.180.119:31708/nginx
